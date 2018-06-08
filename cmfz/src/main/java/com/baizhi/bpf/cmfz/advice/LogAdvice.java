@@ -56,7 +56,7 @@ public class LogAdvice implements MethodInterceptor {
             message = "运行失败";
         }
         Date endTime=new Date();
-        String log="管理员"+name+"在"+sdf.format(beginTime)+"时间开始执行"+methodName+"方法，在"+sdf.format(endTime)+"时间执行结束，共耗时长"+(beginTime.getTime()-endTime.getTime())/60/1000+"S,"+message;
+        String log="管理员"+name+"在"+sdf.format(beginTime)+"时间开始执行"+methodName+"方法，在"+sdf.format(endTime)+"时间执行结束，共耗时长"+(endTime.getTime()-beginTime.getTime())/1000+"S,"+message;
         System.out.println(log);
         Log l = new Log();
         l.setText(log);
