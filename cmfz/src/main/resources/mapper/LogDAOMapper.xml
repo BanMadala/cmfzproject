@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.bpf.cmfz.dao.LogDAO">
+
+
+    <insert id="insertLog" parameterType="Log">
+        <selectKey>
+        select last_insert_id() as id
+        </selectKey>
+        insert into cmfz_log values(#{id},UNIX_TIMESTAMP(#{createTime}),#{text},#{managerAccount})
+    </insert>
+
+
+
+    <select id="selAllLogInPage" resultType="com.baizhi.bpf.cmfz.entity.Log">
+         select id,FROM_UNIXTIME(createTime,'%Y-%m-%d') as createTime,
+         message text,managerAccount from cmfz_log
+         order by id
+         limit #{beginRow},#{pageSize}
+    </select>
+
+    <select id="selAllLogMessage" resultType="com.baizhi.bpf.cmfz.entity.Log">
+        select id,FROM_UNIXTIME(createTime,'%Y-%m-%d') as createTime,message text,managerAccount from cmfz_log
+    </select>
+
+
+
+    <select id="countAllLog" resultType="java.lang.Integer">
+        select count(*) from cmfz_log
+    </select>
+</mapper>

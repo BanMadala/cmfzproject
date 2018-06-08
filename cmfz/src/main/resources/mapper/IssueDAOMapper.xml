@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.bpf.cmfz.dao.IssueDAO">
+    <!--表连接结果映射-->
+    <resultMap id="resultMapForIssue" type="Issue">
+        <id column="issueid" property="id" />
+        <result column="issuename" property="name"/>
+        <result column="issuecd" property="createDate"/>
+        <result column="issuescore" property="score"/>
+        <result column="issueauthor" property="author"/>
+        <result column="issuebr" property="brief"/>
+        <result column="issueimg" property="img"/>
+        <result column="issuecouts" property="counts"/>
+        <collection property="children" ofType="Audio">
+            <id column="audioid"  property="id"/>
+            <result column="name" property="name"/>
+            <result column="size" property="size"/>
+            <result column="url" property="url"/>
+            <result column="audioTime" property="audioTime"/>
+            <result column="parentId" property="issueId"/>
+            <result column="md5Code" property="md5Code"/>
+        </collection>
+    </resultMap>
+    <!--添加专辑 -->
+    <insert id="insertIssue">
+        <selectKey keyProperty="id" resultType="Integer" order="AFTER">
+            select last_insert_id() as id
+        </selectKey>
+            insert into cmfz_issue values(#{id},#{name},current_date(),
+        #{score},#{author},#{brief},#{img},#{counts})
+    </insert>
+    <!--修改专辑 -->
+    <update id="updateIssue">
+    update cmfz_issue set name=#{name},score=#{score},author=#{author},brief=#{brief}
+    where id=#{id}
+    </update>
+    <!--删除专辑 -->
+    <delete id="deleteIssue">
+        delete from cmfz_issue where id=#{id}
+    </delete>
+
+    <!--查询所有专辑以及子章节-->
+    <select id="selectAllIssue" resultMap="resultMapForIssue">
+    select issue.id issueid,issue.name issuename,issue.createDate issuecd
+    ,issue.score issuescore,issue.author issueauthor,
+    issue.brief issuebr,issue.img issueimg,issue.counts issuecouts,audio.id audioid,
+    audio.name,audio.size,audio.url,audio.audioTime,audio.md5Code,audio.issueId parentId
+    from cmfz_issue issue
+    left join
+    cmfz_audio audio
+    on issue.id=audio.issueId
+    order by issueid
+    limit #{beginRow},#{pageSize}
+    </select>
+
+    <!--查询所有数量 -->
+    <select id="selectAllCounts" resultMap="resultMapForIssue">
+    select issue.id issueid,issue.name issuename,issue.createDate issuecd
+    ,issue.score issuescore,issue.author issueauthor,
+    issue.brief issuebr,issue.img issueimg,issue.counts issuecouts,audio.id audioid,
+    audio.name,audio.size,audio.url,audio.audioTime,audio.md5Code,audio.issueId parentId
+    from cmfz_issue issue
+    left join
+    cmfz_audio audio
+    on issue.id=audio.issueId
+    order by issueid
+    </select>
+
+    <select id="selectAllIssueIdAndName" resultType="Issue">
+        select id,name from cmfz_issue
+    </select>
+
+    <select id="selectAllIssueForShow" resultType="com.baizhi.bpf.cmfz.entity.Issue">
+    select issue.id issueid,issue.name issuename,issue.createDate issuecd
+    ,issue.score issuescore,issue.author issueauthor,
+    issue.brief issuebr,issue.img issueimg,issue.counts issuecouts,audio.id audioid,
+    audio.name,audio.size,audio.url,audio.audioTime,audio.md5Code,audio.issueId parentId
+    from cmfz_issue issue
+    left join
+    cmfz_audio audio
+    on issue.id=audio.issueId
+    order by issueid
+    </select>
+</mapper>
