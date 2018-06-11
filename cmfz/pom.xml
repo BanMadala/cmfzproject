@@ -121,7 +121,7 @@
         </dependency>
 
         <!-- spring 核心包 -->
-        <!-- springframe start -->
+        <!-- spring frame start -->
 
         <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjweaver -->
         <dependency>

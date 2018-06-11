@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+    <appender  name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder 默认配置为PatternLayoutEncoder -->
+        <!--<encoder >-->
+            <!--<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>-->
+            <!--<charset>UTF-8</charset>-->
+        <!--</encoder>-->
+
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.classic.PatternLayout">
+                <pattern>%date{HH:mm:ss.SSS} [%thread] %-5level %logger{10} [%file:%line] -  %msg%n</pattern>
+            </layout>
+            <charset>UTF-8</charset>
+        </encoder>
+
+
+    </appender>
+
+
+    <logger name="com.baizhi.bpf.controller" level="DEBUG" />
+
+    <logger name="com.baizhi.bpf.dao" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+    </logger>
+    <logger name="com.baizhi.bpf.controller" level="DEBUG"/>
+
+
+    <root level="ERROR">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>

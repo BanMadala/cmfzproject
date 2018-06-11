@@ -1,0 +1,28 @@
+#配置服务器端口，与项目初始化路径,并解析字符格式
+server:
+  port: 9090
+  context-path: /springboot1
+  jsp-servlet:
+    init-parameters:
+       development: true
+spring:
+  http:
+    encoding:
+      charset: UTF-8
+#配置视图解析
+  mvc:
+    view:
+      prefix: /
+      suffix: .jsp
+#配置mybatis
+  datasource:
+    name: springboottest
+    url: jdbc:mysql://localhost:3306/springboottest
+    username: root
+    password: system
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+#扫描实体类起别名与mapper文件注册
+mybatis:
+  type-aliases-package: com.baizhi.bpf.entity
+  mapper-locations: classpath:mapper/*Mapper.xml
