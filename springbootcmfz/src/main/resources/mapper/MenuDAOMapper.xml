@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.bpf.springbootcmfz.dao.MenuDAO">
+
+    <!--结果映射 -->
+    <resultMap id="resultMapforMenu" type="Menu">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="iconCls" property="iconCls"/>
+        <result column="url" property="url"/>
+        <collection property="childs" ofType="Menu" >
+            <id column="chlId" property="id"/>
+            <result column="chlUrl" property="url"/>
+            <result column="chlTitle" property="title"/>
+            <result column="chlIconCls" property="iconCls"/>
+            <result column="parentId" property="parentId"/>
+
+        </collection>
+    </resultMap>
+
+    <select id="selectAllMenu" resultMap="resultMapforMenu">
+
+    select par.id,par.title,par.iconCls,par.url,
+    chl.id chlId,chl.title chlTitle,chl.url chlUrl,chl.iconCls chlIconCls,chl.parentId from
+    cmfz_menu par
+    inner join
+    cmfz_menu chl
+    on par.id=chl.parentId
+    </select>
+</mapper>

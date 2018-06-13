@@ -1,0 +1,31 @@
+#spring整合mybatisspring:spring:spring:spring:
+  spring:
+    datasource:
+      username: root
+      password: system
+      name: mysqlcmfz
+      driver-class-name: com.mysql.jdbc.Driver
+      type: com.alibaba.druid.pool.DruidDataSource
+      url: jdbc:mysql://localhost:3306/mycmfz?allowMultiQueries=true&useUnicode=true&characterEncoding=UTF-8
+    mvc:
+      view:
+        prefix: /
+        suffix: .jsp
+    http:
+      encoding:
+        charset: UTF-8
+      multipart:
+        enabled: true
+        max-file-size: 1024000MB
+        max-request-size: 1024000MB
+        
+  mybatis:
+    type-aliases-package: com.baizhi.bpf.springbootcmfz.entity
+    mapper-locations: classpath:mapper/*DAOMapper.xml
+#整合jsp
+  server:
+    jsp-servlet:
+        init-parameters:
+           development: true
+    port: 9090
+    context-path: /springbootcmfz

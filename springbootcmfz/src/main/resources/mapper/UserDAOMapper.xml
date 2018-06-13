@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.bpf.springbootcmfz.dao.UserDAO">
+
+
+    <!--保存用户手机号与用户密码，并生成用户id-->
+    <insert id="insertUserPhoneAndUserPassword">
+        <selectKey order="AFTER" resultType="Integer" keyProperty="id">
+            select last_insert_id() as id
+        </selectKey>
+        insert into cmfz_user (id,phoneNum,password,salt)values(#{id,jdbcType=INTEGER},#{phoneNum,jdbcType=VARCHAR},#{password,jdbcType=VARCHAR},#{salt,jdbcType=VARCHAR})
+    </insert>
+
+
+    <update id="updateUserStatts" parameterType="User">
+      <foreach collection="list" item="s" open="" close="" separator=";">
+          <if test="s.id!=null">
+          update cmfz_user
+          <trim prefix="set" >
+              status=#{s.status,jdbcType=VARCHAR} where id=#{s.id,jdbcType=INTEGER}
+          </trim>
+          </if>
+      </foreach>
+    </update>
+
+
+    <update id="updateUserMessage">
+        update cmfz_user
+        <set >
+            <if test="phoneNum!=null">phoneNum=#{phoneNum,jdbcType=VARCHAR},</if>
+            <if test="userName!=null">username=#{userName},</if>
+            <if test="password!=null">password=#{password},</if>
+            <if test="salt!=null">salt=#{salt},</if>
+            <if test="dharmaName!=null">dharmaName=#{dharmaName,}</if>
+            <if test="province!=null">province=#{province},</if>
+            <if test="city!=null">city=#{city},</if>
+            <if test="sex!=null">sex=#{sex},</if>
+            <if test="headPic!=null">headPic=#{headPic},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="date!=null">date=UNIX_TIMESTAMP(#{phoneNum}),</if>
+            <if test="regDate!=null">regDate=UNIX_TIMESTAMP(#{regDate}),</if>
+            <if test="masterId!=null">masterId=#{masterId}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <!--分页查询用户数据 -->
+    <select id="selectAllUserInthePage" resultType="com.baizhi.bpf.springbootcmfz.entity.User">
+     select id,phoneNum,username userName,password,salt,dharmaName,province,
+       city,sex,sign,headPic,status,FROM_UNIXTIME( date, '%Y-%m-%d') as date,FROM_UNIXTIME(regDate, '%Y-%m-%d' ) as regDate,masterId
+       from cmfz_user
+       order by id
+       LIMIT #{beginRow},#{pageSize}
+    </select>
+    <!--&lt;!&ndash;查询所有数据条数 &ndash;&gt;-->
+    <select id="countAllUser" resultType="java.lang.Integer">
+        select count(*) from cmfz_user
+    </select>
+    <!--&lt;!&ndash;查询所有省份的男生分布情况 &ndash;&gt;-->
+    <select id="selectAllMaleUserInProvince" resultType="com.baizhi.bpf.springbootcmfz.vo.ProvinceVO">
+      select  province name,count(*) value  from cmfz_user
+       where sex='y'
+      group by province
+    </select>
+    <!--&lt;!&ndash;查询所有省份的女生分布情况 &ndash;&gt;-->
+    <select id="selectAllFemaleUserInProvince" resultType="com.baizhi.bpf.springbootcmfz.vo.ProvinceVO">
+         select  province name,count(*) value  from cmfz_user
+       where sex='n'
+      group by province
+    </select>
+
+    <!--&lt;!&ndash;根据时间区间查询用户数量 &ndash;&gt;-->
+    <!--<select id="selectUserBetweenTime" resultType="java.lang.Integer">-->
+      <!--select count(*) from cmfz_user-->
+      <!--where regDate between #{beginTime} and #{endTime}-->
+    <!--</select>-->
+
+    <select id="selectUserBetweenTime" resultType="java.lang.Integer">
+    select count(*) from cmfz_user
+    where  (unix_timestamp(current_timestamp )-regDate)/60/60/24 between #{beginDay} and #{endDay}
+    </select>
+    <!--查询所有用户 -->
+    <select id="selectAllUser" resultType="com.baizhi.bpf.springbootcmfz.entity.User">
+       select id,phoneNum,username userName,password,salt,dharmaName,province,
+       city,sex,sign,headPic,status,FROM_UNIXTIME( date, '%Y-%m-%d') as date,FROM_UNIXTIME(regDate, '%Y-%m-%d' ) as regDate,masterId
+       from cmfz_user
+       order by id
+    </select>
+
+
+    <select id="queryUserByPhone" resultType="com.baizhi.bpf.springbootcmfz.entity.User">
+        select id,phoneNum,username userName,password,salt,dharmaName,province,
+       city,sex,sign,headPic,status,FROM_UNIXTIME( date, '%Y-%m-%d') as date,FROM_UNIXTIME(regDate, '%Y-%m-%d' ) as regDate,masterId
+       from cmfz_user
+       where phoneNum=#{phoneNum}
+    </select>
+
+    <select id="queryUserMember" resultType="User">
+         select id,phoneNum,username userName,password,salt,dharmaName,province,
+       city,sex,sign,headPic,status,FROM_UNIXTIME( date, '%Y-%m-%d') as date,FROM_UNIXTIME(regDate, '%Y-%m-%d' ) as regDate,masterId
+       from cmfz_user
+       where id!=#{uid}
+    </select>
+
+</mapper>

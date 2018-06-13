@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.bpf.springbootcmfz.dao.AudioDAO">
+    <!--添加章节 -->
+    <insert id="insertAudio">
+        insert into cmfz_audio values(#{id},#{name},#{size},#{url},#{audioTime},#{md5Code},#{issueId})
+    </insert>
+    <!--删除章节 -->
+    <delete id="delAudio">
+        delete from cmfz_audio where id=#{audioId}
+    </delete>
+
+    <select id="selectAllAudioInTheIssue" resultType="Audio">
+        select id,name,size,url,audioTime,md5Code,issueId from cmfz_audio
+        where issueId=#{parentId}
+    </select>
+
+    <select id="selectOneAudioById" resultType="Audio">
+        select id,name,size,url,audioTime,md5Code,issueId from cmfz_audio
+        where id=#{audioId}
+    </select>
+
+    <select id="selectAllAUdio" resultType="Audio">
+        select id,name,size,url,audioTime,md5Code,issueId from cmfz_audio
+    </select>
+
+    <!--通过专辑id查询章节-->
+    <select id="getAllAudioUnderIssue" resultType="com.baizhi.bpf.springbootcmfz.entity.Audio">
+        select id,name,size,url,audioTime,md5Code,issueId from cmfz_audio
+        where issueId=#{issueId}
+    </select>
+
+</mapper>
